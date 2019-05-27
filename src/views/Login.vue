@@ -16,7 +16,7 @@
         </div>
 
         <p>
-            <router-link to="/signup">Du hast noch keinen Account?</router-link>
+            <router-link to="/signup">Du hast noch keinen Account?</router-link><br>
         </p>
     </div>
 </template>

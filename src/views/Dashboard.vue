@@ -92,12 +92,6 @@ export default {
                 .then(() => {
                     this.$router.replace("login");
                 });
-        },
-        isValidNewDistance() {
-            return (
-                this.newDistance > this.currentDistance &&
-                !isNaN(this.newDistance)
-            );
         }
     },
     computed: {
