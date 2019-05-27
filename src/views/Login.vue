@@ -2,14 +2,18 @@
     <div class="login">
         <h1>Login</h1>
 
-        <div class="email">E-Mail</div>
-        <input class="text-input" type="text" v-model="email" required>
-        <br>
-        <div class="password">Passwort</div>
-        <input class="text-input" type="password" v-model="password" required >
-        <br>
+        <div class="field">
+            <div class="title">E-Mail</div>
+            <input class="text-input" type="text" v-model="email" required>
+        </div>
+        <div class="field">
+            <div class="title">Passwort</div>
+            <input class="text-input" type="password" v-model="password" required>
+        </div>
 
-        <div v-on:click="login" class="button success">Einloggen</div>
+        <div class="actions">
+            <div v-on:click="login" class="button success">Einloggen</div>
+        </div>
 
         <p>
             <router-link to="/signup">Du hast noch keinen Account?</router-link>
@@ -45,5 +49,19 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss">
+.field {
+    margin: 10px auto;
+    .title {
+        font-weight: bold;
+    }
+    input {
+        border: 0;
+        font-size: 1.5em;
+        text-align: center;
+        padding: 10px 25px;
+        border-radius: 8px;
+        outline: 0;
+    }
+}
 </style>
