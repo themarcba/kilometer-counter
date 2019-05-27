@@ -22,7 +22,10 @@ export default {
     },
     methods: {
         updateValue() {
-            this.$emit("update:value", Number.parseFloat(this.value.toString().replace(',', '.')));
+            this.$emit(
+                "update:value",
+                Number.parseFloat(this.value.toString().replace(",", "."))
+            );
         }
     }
 };
@@ -37,6 +40,8 @@ export default {
         margin-top: 15px;
         outline: 0;
         text-align: center;
+        width: 100%;
+        box-sizing: border-box;
     }
     .unit {
         font-size: 1em;
