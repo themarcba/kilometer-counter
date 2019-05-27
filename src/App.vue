@@ -1,14 +1,20 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
+    <!-- <div id="nav">
+      <router-link to="/">Dashboard</router-link> |
       <router-link to="/about">About</router-link>
-    </div>
+    </div> -->
+
+    <h1 id="title" class="text-2xl font-bold">Kilometerzähler</h1>
     <router-view/>
   </div>
 </template>
 
 <style lang="scss">
+body {
+    background: #f5f5f5;
+}
+
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -16,14 +22,7 @@
   text-align: center;
   color: #2c3e50;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
+input {
     color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>
