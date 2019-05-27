@@ -1,4 +1,4 @@
-# kilometre-counter
+# kilometer-counter
 
 My dad who suffers from aphasia asked me to make him a program where he would simply enter the current kilometers his bike reads, and the program would then tell him how many kilometers he made that day. Like this he'd always know and not have to make -for him difficult- calculations in the head.
 

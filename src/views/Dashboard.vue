@@ -74,7 +74,7 @@ export default {
                 };
             } else {
                 this.distances.push(this.newDistance);
-                db.collection("kilometres")
+                db.collection("kilometers")
                     .doc(this.uid)
                     .set(
                         { distances: this.distances, createdAt },
@@ -120,7 +120,7 @@ export default {
             if (user) this.uid = user.uid;
             console.log(this.uid);
             let _this = this;
-            var docRef = db.collection("kilometres").doc(this.uid);
+            var docRef = db.collection("kilometers").doc(this.uid);
             docRef
                 .get()
                 .then(function(doc) {
