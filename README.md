@@ -1,5 +1,6 @@
 # kilometer-counter
-🚨🚨🚨 This is an improved version of https://github.com/themarcba/simple-kilometer-counter 🚨🚨🚨
+🚨 This is an improved version of https://github.com/themarcba/simple-kilometer-counter 🚨
+
 I wasn't satisfied with the result, so I redid everything.
 
 # Why?
