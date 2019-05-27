@@ -5,7 +5,7 @@
       <router-link to="/about">About</router-link>
     </div> -->
 
-    <h1 id="title" class="text-2xl font-bold">Kilometerzähler</h1>
+    <h1 id="title" >Kilometerzähler</h1>
     <router-view/>
   </div>
 </template>
