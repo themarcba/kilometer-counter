@@ -3,7 +3,7 @@
         <div class="title">{{ title }}</div>
         <div class="value">
             <!-- <input type="text" @change="updateValue" v-model="value" number> -->
-            <div class="input">{{ value }}</div>
+            <div class="input">{{ value || "&nbsp;" }}</div>
         </div>
         <span class="unit">{{ unit }}</span>
 
@@ -53,7 +53,7 @@ export default {
         text-align: center;
         width: 100%;
         box-sizing: border-box;
-        height: 60px;
+        padding: 10px auto;
         color: #2c3e50;
     }
 }

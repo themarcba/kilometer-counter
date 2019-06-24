@@ -1,17 +1,25 @@
 <template>
     <div class="home">
-        <div v-if="uid && distances">
-            <div id="logout-button" class="button" v-on:click="logout">Ausloggen</div>
+        <div v-if="uid">
             <div v-if="!editMode">
-                <ValueCard title="Aktuelle Distanz" :value="currentDistance" unit="km"></ValueCard>
-                <ValueCard
-                    title="Zurückgelegte Distanz"
-                    :value="differenceBetweenDistances"
-                    unit="km"
-                ></ValueCard>
+                <div class="card" v-if="!entries">
+                    <h2>Keine Einträge vorhanden 😟</h2>
+                </div>
 
-                <div class="button success" @click="editMode = true">Neue Distanz eintragen +</div>
-                <br>
+                <div
+                    class="big button success"
+                    @click="editMode = true"
+                    v-if="uid && !editMode"
+                >Neue Distanz eintragen +</div>
+                <div v-if="entries">
+                    <div v-for="(entry, index) in entries" :key="entry.id">
+                        <KilometerCard
+                            :entry="entry"
+                            :beforeEntry="entries[index+1]"
+                            @delete-entry="deleteEntry"
+                        ></KilometerCard>
+                    </div>
+                </div>
             </div>
         </div>
         <div v-if="editMode">
@@ -20,15 +28,24 @@
                 <div class="message">{{ error.message }}</div>
             </div>
 
-            <EditValueCard title="Neue Distanz eintragen:" unit="km" @value-confirmed="newNumberConfirmed"></EditValueCard>
+            <EditValueCard
+                title="Neue Distanz eintragen:"
+                unit="km"
+                @value-confirmed="newNumberConfirmed"
+            ></EditValueCard>
             <div class="button" @click="editMode = false">Abbrechen</div>
         </div>
+
+        <!-- <div id="logout-button" class="button" v-on:click="logout">Ausloggen</div> -->
+        <!-- <div class="footer" v-if="uid">
+            <strong @click="logout">Ausloggen?</strong>
+        </div> -->
     </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import ValueCard from "@/components/ValueCard.vue";
+import KilometerCard from "@/components/KilometerCard.vue";
 import EditValueCard from "@/components/EditValueCard.vue";
 import NumberPad from "@/components/NumberPad.vue";
 
@@ -44,44 +61,74 @@ import { db } from "../main";
 export default {
     name: "home",
     components: {
-        ValueCard,
+        KilometerCard,
         EditValueCard,
         NumberPad
     },
     data() {
         return {
-            distances: [],
+            entries: [],
             editMode: false,
             uid: null,
             error: {}
         };
     },
     methods: {
-        newNumberConfirmed(newDistance) {
+        newNumberConfirmed(kilometerCount) {
             const createdAt = new Date();
-            
-            if (newDistance <= this.currentDistance) {
+
+            if (kilometerCount <= this.currentDistance) {
                 this.error = {
                     title: `Die Distanz muss größer als die vorherige Distanz (${
                         this.currentDistance
                     } km) sein`
                 };
-            } else if (isNaN(newDistance)) {
+            } else if (isNaN(kilometerCount)) {
                 this.error = {
                     title: "Ungültige Zahl",
                     message: `Bitte überprüfe ob die angegebene Zahl gültig ist.`
                 };
             } else {
-                this.distances.push(newDistance);
-                db.collection("kilometers")
-                    .doc(this.uid)
-                    .set(
-                        { distances: this.distances, createdAt },
-                        { merge: true }
-                    );
+                db.collection("kilometer-entries")
+                    .add({
+                        kilometerCount,
+                        createdAt,
+                        uid: this.uid
+                    })
+                    .then(entry => {
+                        this.getEntries();
+                    });
                 this.error = {};
                 this.editMode = false;
             }
+        },
+        getEntries() {
+            firebase.auth().onAuthStateChanged(user => {
+                if (user) this.uid = user.uid;
+                let _this = this;
+
+                // db query
+                this.$bind(
+                    "kilometer-entries",
+                    db
+                        .collection("kilometer-entries")
+                        .where("uid", "==", user.uid)
+                        .orderBy("createdAt", "desc")
+                ).then(entries => {
+                    console.log(entries);
+                    this.entries = entries;
+                    this.$unbind("kilometer-entries");
+                });
+            });
+        },
+        deleteEntry(entryId) {
+            console.log("deleto " + entryId);
+            db.collection("kilometer-entries")
+                .doc(entryId)
+                .delete()
+                .then(entry => {
+                    this.getEntries();
+                });
         },
         logout() {
             firebase
@@ -92,51 +139,21 @@ export default {
                 });
         }
     },
-    computed: {
-        currentDistance() {
-            return this.distances.length > 0
-                ? this.distances[this.distances.length - 1]
-                : 0;
-        },
-        lastDistance() {
-            return this.distances.length > 1
-                ? this.distances[this.distances.length - 2]
-                : 0;
-        },
-        differenceBetweenDistances() {
-            return this.currentDistance - this.lastDistance;
-        }
-    },
     created() {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) this.uid = user.uid;
-            let _this = this;
-            var docRef = db.collection("kilometers").doc(this.uid);
-            docRef
-                .get()
-                .then(function(doc) {
-                    if (doc.exists) {
-                        _this.distances = doc.data().distances || [];
-                    } else {
-                        _this.distances = [];
-                        console.log("No such document!");
-                    }
-                })
-                .catch(function(error) {
-                    console.log("Error getting document:", error);
-                });
-        });
+        this.getEntries();
     }
 };
 </script>
 
 <style lang="scss">
 .button {
+    display: inline-grid;
+    --moz-display: inline-grid;
+    --ms-display: inline-grid;
     padding: 10px 15px;
     cursor: pointer;
     margin: 10px;
     border-radius: 5px;
-    display: inline-block;
     font-weight: bold;
     background: #c7c7c7;
     color: #fff;
@@ -144,8 +161,32 @@ export default {
         background: #42b983;
         color: #fff;
     }
+    &.danger {
+        background: tomato;
+        color: #fff;
+    }
+    &.big {
+        font-size: 1.5em;
+    }
 }
 
+.home {
+    h2 {
+        &.vertical-margins {
+            margin: 50px auto;
+        }
+    }
+}
+
+.footer {
+    height: 50px;
+    line-height: 50px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    background: #ccc;
+    color: #444;
+}
 .card {
     &.error {
         background: tomato;

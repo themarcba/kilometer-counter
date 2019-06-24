@@ -4,6 +4,7 @@
         <div class="value">
             {{ value % 1 !== 0 ? value.toFixed(1) : value }}
             <span class="unit">{{ unit }}</span>
+            <span class="tendency">+35%</span>
         </div>
     </div>
 </template>
@@ -36,6 +37,11 @@ export default {
     .value {
         font-size: 3em;
         font-weight: bold;
+    }
+    .tendency {
+        font-size: 0.5em;
+        position: absolute;
+        right: 40px;
     }
 }
 </style>
