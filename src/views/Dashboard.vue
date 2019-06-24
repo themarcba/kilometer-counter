@@ -37,11 +37,11 @@
         </div>
 
         <!-- <div id="logout-button" class="button" v-on:click="logout">Ausloggen</div> -->
-        <div class="footer" v-if="uEmail">
+        <!-- <div class="footer" v-if="uEmail">
             {{uEmail}}
             &middot;
             <strong @click="logout">Ausloggen?</strong>
-        </div>
+        </div> -->
     </div>
 </template>
 
