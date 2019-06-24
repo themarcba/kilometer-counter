@@ -37,9 +37,11 @@
         </div>
 
         <!-- <div id="logout-button" class="button" v-on:click="logout">Ausloggen</div> -->
-        <!-- <div class="footer" v-if="uid">
+        <div class="footer" v-if="uEmail">
+            {{uEmail}}
+            &middot;
             <strong @click="logout">Ausloggen?</strong>
-        </div> -->
+        </div>
     </div>
 </template>
 
@@ -70,6 +72,7 @@ export default {
             entries: [],
             editMode: false,
             uid: null,
+            uEmail: null,
             error: {}
         };
     },
@@ -104,7 +107,10 @@ export default {
         },
         getEntries() {
             firebase.auth().onAuthStateChanged(user => {
-                if (user) this.uid = user.uid;
+                if (user) {
+                    this.uid = user.uid
+                    this.uEmail = user.email
+                }
                 let _this = this;
 
                 // db query
