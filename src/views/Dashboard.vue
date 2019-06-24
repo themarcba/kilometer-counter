@@ -20,10 +20,7 @@
                 <div class="message">{{ error.message }}</div>
             </div>
 
-            <EditValueCard title="Neue Distanz eintragen:" unit="km" :value.sync="newDistance"></EditValueCard>
-            <ValueCard title="Aktuelle Distanz" :value="currentDistance" unit="km"></ValueCard>
-            <div class="button success" @click="saveNewDistance">Speichern</div>
-            <br>
+            <EditValueCard title="Neue Distanz eintragen:" unit="km" @value-confirmed="newNumberConfirmed"></EditValueCard>
             <div class="button" @click="editMode = false">Abbrechen</div>
         </div>
     </div>
@@ -33,6 +30,7 @@
 // @ is an alias to /src
 import ValueCard from "@/components/ValueCard.vue";
 import EditValueCard from "@/components/EditValueCard.vue";
+import NumberPad from "@/components/NumberPad.vue";
 
 // Firebase
 import firebase from "firebase/app";
@@ -47,33 +45,34 @@ export default {
     name: "home",
     components: {
         ValueCard,
-        EditValueCard
+        EditValueCard,
+        NumberPad
     },
     data() {
         return {
             distances: [],
-            newDistance: null,
             editMode: false,
             uid: null,
             error: {}
         };
     },
     methods: {
-        saveNewDistance() {
+        newNumberConfirmed(newDistance) {
             const createdAt = new Date();
             
-            if (this.newDistance <= this.currentDistance) {
+            if (newDistance <= this.currentDistance) {
                 this.error = {
-                    title: `Die Distanz muss größer als die vorherige Distanz (${this.currentDistance} km) sein`
+                    title: `Die Distanz muss größer als die vorherige Distanz (${
+                        this.currentDistance
+                    } km) sein`
                 };
-            }
-            else if(isNaN(this.newDistance)) {
+            } else if (isNaN(newDistance)) {
                 this.error = {
                     title: "Ungültige Zahl",
                     message: `Bitte überprüfe ob die angegebene Zahl gültig ist.`
                 };
             } else {
-                this.distances.push(this.newDistance);
+                this.distances.push(newDistance);
                 db.collection("kilometers")
                     .doc(this.uid)
                     .set(
@@ -82,7 +81,6 @@ export default {
                     );
                 this.error = {};
                 this.editMode = false;
-
             }
         },
         logout() {
@@ -112,7 +110,6 @@ export default {
     created() {
         firebase.auth().onAuthStateChanged(user => {
             if (user) this.uid = user.uid;
-            console.log(this.uid);
             let _this = this;
             var docRef = db.collection("kilometers").doc(this.uid);
             docRef

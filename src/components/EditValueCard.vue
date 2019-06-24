@@ -2,15 +2,22 @@
     <div class="card edit">
         <div class="title">{{ title }}</div>
         <div class="value">
-            <input type="text" @change="updateValue" v-model="value" number>
+            <!-- <input type="text" @change="updateValue" v-model="value" number> -->
+            <div class="input">{{ value }}</div>
         </div>
         <span class="unit">{{ unit }}</span>
+
+        <NumberPad :value.sync="value" @confirm="confirmValue"></NumberPad>
     </div>
 </template>
 
 <script>
+import NumberPad from "@/components/NumberPad.vue";
 export default {
     name: "EditValueCard",
+    components: {
+        NumberPad
+    },
     data() {
         return {
             value: null
@@ -21,10 +28,10 @@ export default {
         unit: String
     },
     methods: {
-        updateValue() {
+        confirmValue() {
             this.$emit(
-                "update:value",
-                Number.parseFloat(this.value.toString().replace(",", "."))
+                "value-confirmed",
+                this.value
             );
         }
     }
@@ -33,7 +40,11 @@ export default {
 
 <style lang="scss">
 .card.edit {
-    input {
+    .unit {
+        font-size: 1em;
+        font-weight: bold;
+    }
+    div.input {
         border: solid #eee 1px;
         border-radius: 5px;
         font-size: 1em;
@@ -42,10 +53,8 @@ export default {
         text-align: center;
         width: 100%;
         box-sizing: border-box;
-    }
-    .unit {
-        font-size: 1em;
-        font-weight: bold;
+        height: 60px;
+        color: #2c3e50;
     }
 }
 </style>

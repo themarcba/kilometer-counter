@@ -19,12 +19,7 @@ export default {
         value: Number,
         unit: String,
         editMode: Boolean
-    },
-    methods: {
-        greet() {
-            console.log("greet");
-        }
-    },
+    }
 };
 </script>
 
