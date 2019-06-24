@@ -34,7 +34,7 @@ input {
   grid-template-columns: 1fr;
   grid-template-rows: 70px auto;
   grid-template-areas: "." "." ".";
-  height: 100vh;
+//   height: 100vh;
 }
 
 .header {
