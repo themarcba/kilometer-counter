@@ -44,7 +44,7 @@ export default {
         difference() {
             return this.beforeEntry
                 ? this.entry.kilometerCount - this.beforeEntry.kilometerCount
-                : 0;
+                : '--';
         }
     },
     methods: {
