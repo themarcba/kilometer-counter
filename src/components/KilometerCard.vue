@@ -66,7 +66,7 @@ export default {
         font-size: 1.5em;
     }
     .value {
-        font-size: 4em;
+        font-size: 2.5em;
         font-weight: bold;
     }
     .tendency {

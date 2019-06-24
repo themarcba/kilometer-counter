@@ -73,10 +73,11 @@ export default {
 <style lang="scss">
 .number-pad {
     display: grid;
-    grid-template-rows: repeat(4, 100px);
+    grid-template-rows: repeat(4, 80px);
     grid-template-columns: repeat(3, 1fr);
     align-content: space-between;
-    max-width: 400px;
+    grid-row-gap: 0;
+    max-width: 250px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -90,7 +91,7 @@ export default {
     justify-content: center;
 
     font-size: 0.8em;
-    min-height: 3rem;
+    // min-height: 1rem;
     border: solid 2px #42b983;
     color: #42b983;
     font-size: 1.5em;
@@ -98,8 +99,8 @@ export default {
     font-weight: bold;
     border-radius: 1000px;
 
-    height: 80px;
-    width: 80px;
+    height: 60px;
+    width: 60px;
     &.primary {
         background: #42b983;
         color: #fff;
